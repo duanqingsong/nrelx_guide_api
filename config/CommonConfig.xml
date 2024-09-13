@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+系統通用的參數配置文件
+-->
+<ConfigPool>
+  <!--團計劃制定中,出發時間的默認值-->
+  <Parameter Name="DV_StartTime" ShowName="出發時間的默認值" Value="羅湖8:30 皇崗9:00" Remark="團計劃制定過程中用到" />
+  <Parameter Name="Recipe007Dept" ShowName="" Value="" Remark="星辰旅游门市代码,用英文逗号隔开,指定的部门代码打印的收据使用星辰的logo" />
+  <Parameter Name="HKROE" ShowName="默認港幣匯率" Value="0.88201" Remark="" />
+  <Parameter Name="TICROE" ShowName="TIC缴纳比例" Value="0.0015" Remark="" />
+  <!--默認預定過期時間(小時)-->
+  <Parameter Name="DefaultReserveHours" ShowName="默認預定過期時間" Value="48" Remark="單位:小時" />
+  <!--默認一頁顯示數據數-->
+  <Parameter Name="DefaultPageSize" ShowName="默認1頁顯示行數" Value="15" Remark="" />
+  <!--線路成本模板-->
+  <Parameter Name="CostResume" ShowName="線路成本模板" Remark="" Value="成本說明:&#xD;&#xA;===========&#xD;&#xA;大交通費:&#xD;&#xA;車費:&#xD;&#xA;導遊服務費:&#xD;&#xA;領隊費:&#xD;&#xA;房費:&#xD;&#xA;餐費:&#xD;&#xA;票費:&#xD;&#xA;優惠:&#xD;&#xA;雜費:&#xD;&#xA;地接綜費:&#xD;&#xA;稅險:&#xD;&#xA;-----------------&#xD;&#xA;成本價:&#xD;&#xA;是否含客人小費:(含)   (分成CN:HK  3:7)香港結算成本:&#xD;&#xA;毛利:----------------&#xD;&#xA;香港結算價:&#xD;&#xA;門市報價:" />
+  <!--回訪記錄模板-->
+  <Parameter Name="CallbackResume" ShowName="回訪記錄模板" Remark="" Value="車:&#xD;&#xA;餐:&#xD;&#xA;房:&#xD;&#xA;線路:&#xD;&#xA;導遊:&#xD;&#xA;建議:&#xD;&#xA;" />
+  <!--每天停止報名的日期(前N天)-->
+  <Parameter Name="StopRegisterPreNDay" ShowName="停止報名的日期" Value="1" Remark="前N天的團,禁止報名" />
+  <!--每天停止報名的時間-->
+  <Parameter Name="StopTime" ShowName="停止報名的時間" Remark="例如:16點表示下午4:00後停止報名" Value="16" />
+  <!--能支持的最大座位数,用于选择座位下拉列表的最大值-->
+  <Parameter Name="MaxSeatCount" ShowName="支持的最大座位数" Remark="用于选择座位下拉列表的最大值" Value="53" />
+  <!--导游接团时间(默认)-->
+  <Parameter Name="ReceiveTime_Default" ShowName="默認导游接团时间" Value="8:30" Remark="导游接团时间(默认)" />
+  <!--导游接团时间(香港XX旅遊)-->
+  <Parameter Name="ReceiveTime_香港XX旅遊" ShowName="香港XX旅遊的默認导游接团时间" Value="8:00" Remark="导游接团时间(香港XX旅遊)" />
+  <!--旅游线路查询的查询条件,默认的线路状态(字典ID都好分割字符串)-->
+  <Parameter Name="DefaultTourStatusQueryCondition" ShowName="旅游线路查询的查询条件" Value="72,73" Remark="旅游线路查询的查询条件,默认的线路状态(字典ID都好分割字符串)" />
+  <!--录入游客资料时间限制：19:30 表示19:30以后需要授权才能录入游客资料-->
+  <Parameter Name="EditTourerinfoLimitTime" ShowName="录入游客资料时间限制" Value="20:30" Remark="录入游客资料时间限制：19:30 表示19:30以后需要授权才能录入游客资料(24小时制)" />
+  <Parameter Name="InsurCode" ShowName="保险单号" Value="TVB0002977ZC" Remark="默认保单号码，#号表示自增序列号" />
+  <Parameter Name="AllowNotAddRoom" ShowName="是否允許不補房差" Value="0" Remark="0=不允許不補房差,不能三人同房;1=允許不補房差(但:1人必須補房差)" />
+  <!--短信通知遊客資料配置-->
+  <Parameter Name="SMSNotifyTestNo" ShowName="短信通知：測試電話號碼" Value="13926576007" Remark="填寫後僅僅發送測試短信" />
+  <Parameter Name="SMSNotifyTempId" ShowName="短信通知：短信內容模板" Value="2063999" Remark="親愛的旅客：{1}出遊資訊：1.集合地點：{2}集合；2.導遊{3}旗號：{4}" />
+  <!--<Parameter Name="SMSNotifyLinkedTempId" ShowName="短信通知：電話聯繫後短信模板" Value="1712256" Remark="電話聯繫到客人後發送短信的模板ID" />
+  <Parameter Name="SMSNotifyNotLinkedTempId" ShowName="短信通知：電話未接通短信模板" Value="1712263" Remark="電話未能聯繫到客人後發送短信的模板ID" />-->
+</ConfigPool>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ConfigPool>
+  <Parameter Name="UploadImgUrl" ShowName="文件上传路径" Value="http://img.duan.qs/Handler/UploadFiles.ashx" Remark="文件上传路径" />
+  <Parameter Name="ManageImgUrl" ShowName="文件管理路径" Value="http://img.duan.qs/Handler/ManageFiles.ashx" Remark="文件管理路径" />
+</ConfigPool>
+
+<!--<ConfigPool>
+	<Parameter Name="UploadImgUrl" ShowName="文件上传路径" Value="http://res.gdtour.hk/Handler/UploadFiles.ashx" Remark="文件上传路径" />
+	<Parameter Name="ManageImgUrl" ShowName="文件管理路径" Value="http://res.gdtour.hk/Handler/ManageFiles.ashx" Remark="文件管理路径" />
+</ConfigPool>-->

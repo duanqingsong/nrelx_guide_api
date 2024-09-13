@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+系統通用的參數配置文件
+-->
+<ConfigPool>
+  <!--App默认保险产品 (中短线短期: 广东短线,跨省巴士,天数小于6天,不含6天)-->
+  <Parameter Name="InsurProductId_Short" ShowName="App下单保险产品" Value="9" Remark="App下单保险产品广东短线,跨省巴士,天数小于6天,不含6天" />
+  
+  <!--App默认保险产品 (长线: 东南亚和中国长线,天数大于等于6的所有团)-->
+  <Parameter Name="InsurProductId_Long" ShowName="App下单保险产品" Value="10" Remark="App下单保险产品,东南亚和中国长线,天数大于等于6的所有团" />
+
+  <!--App默认保险产品 (邮轮保险)-->
+  <Parameter Name="InsurProductId_YouLun" ShowName="App下单保险产品" Value="8" Remark="App下单保险产品,邮轮" />
+
+  <!--默認預定過期時間(小時)-->
+  <Parameter Name="ReserveLimitHours" ShowName="默認預定過期時間" Value="48" Remark="單位:小時" />
+
+  <Parameter Name="AppUser" ShowName="App终端对应账号" Value="sa" Remark="终端对应账号" />
+  <Parameter Name="WebUser" ShowName="网赚终端对应账号" Value="website" Remark="终端对应账号" />
+  
+  <Parameter Name="NotifyNo_NewBill" ShowName="新的APP訂單接收通知短信的手機號" Value="" Remark="终端对应账号" />
+
+  <Parameter Name="ApkUrl" ShowName="Apk 下载Url" Value="http://res.gdtour.hk/apk/gdtour.apk" Remark="Apk 下载Url" />
+  <Parameter Name="Apk_Version" ShowName="Apk版本号" Value="1.0.19" Remark="Apk版本号" />
+
+</ConfigPool>

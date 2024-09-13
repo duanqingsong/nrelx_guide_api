@@ -1,0 +1,18 @@
+# Bin and Obj folders
+bin
+obj
+
+# User - specific config files
+Web.Debug.config
+Web.Local.config
+
+# Temporary and log files
+*.tmp
+Logs/*.log
+log/*.*
+
+# Package management folders
+packages
+
+# Visual Studio specific settings
+.vs

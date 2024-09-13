@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+    <root>
+        <!--如果只需要看看Sql设置INFO就够了，如果你要调试可以设置为DEBUG或ALL-->
+    </root>
+    <logger name="nRelaxLogger" additivity="false">
+        <level  value="INFO" />
+        <appender-ref ref="FileAppender" />
+    </logger>
+    <logger name="nRelaxLogger_Login" additivity="false">
+        <level  value="INFO" />
+        <!--OFF > FATAL致命错误 > ERROR > WARN > INFO > DEBUG  > ALL-->
+        <appender-ref ref="AdoNetAppender_SQLServer_LoginLog" />
+    </logger>
+    <logger name="nRelaxLogger_Modify" additivity="false">
+        <level  value="INFO" />
+        <!--OFF > FATAL致命错误 > ERROR > WARN > INFO > DEBUG  > ALL-->
+        <appender-ref ref="AdoNetAppender_SQLServer_ModifyLog" />
+    </logger>
+    
+    <appender name="AdoNetAppender_SQLServer_LoginLog" type="log4net.Appender.AdoNetAppender">
+        <bufferSize value="0" />
+        <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <connectionString value="Persist Security Info=True;User ID=nrelaxloger;Password=nrelaxloger;Initial Catalog=nRelaxDB_LOG;Data Source=127.0.0.1" />
+        <commandText value="INSERT INTO LoginLog ([Date],[Level],[Logger],[OpUserID],[OpUserName],[OpDeptID],[OpDeptName],[Message],[IP],[UserAgent],[MAC]) VALUES (@log_date, @log_level, @logger,@opuserid,@opusername,@opdeptid,@opdeptname, @message, @ip,@useragent,@mac)" />
+        <parameter>
+            <parameterName value="@log_date" />
+            <dbType value="DateTime" />
+            <layout type="log4net.Layout.RawTimeStampLayout" />
+        </parameter>
+        <parameter>
+            <parameterName value="@log_level" />
+            <dbType value="String" />
+            <size value="50" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%level" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@logger" />
+            <dbType value="String" />
+            <size value="255" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%logger" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opuserid" />
+            <dbType value="Int16" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpUserID}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opusername" />
+            <dbType value="String" />
+            <size value="20" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpUserName}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opdeptid" />
+            <dbType value="Int16" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpDeptID}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opdeptname" />
+            <dbType value="String" />
+            <size value="50" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpDeptName}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@message" />
+            <dbType value="String" />
+            <size value="4000" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%message" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@ip" />
+            <dbType value="String" />
+            <size value="20" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{IP}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@useragent" />
+            <dbType value="String" />
+            <size value="60" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{UserAgent}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@mac" />
+            <dbType value="String" />
+            <size value="25" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{MAC}" />
+            </layout>
+        </parameter>
+    </appender>
+
+    <appender name="AdoNetAppender_SQLServer_ModifyLog" type="log4net.Appender.AdoNetAppender">
+        <bufferSize value="0" />
+        <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <connectionString value="Persist Security Info=True;User ID=nrelaxloger;Password=nrelaxloger;Initial Catalog=nRelaxDB_LOG;Data Source=127.0.0.1" />
+        <commandText value="INSERT INTO ModifyLog ([Date],[Level],[Logger],[ModuleCode],[Function],[OpUserID],[OpUserName],[OpDeptID],[OpDeptName],[OpObject],[OpObjectID],[ActionType],[Message]) VALUES (@log_date, @log_level, @logger,@modulecode,@function,@opuserid,@opusername,@opdeptid,@opdeptname,@opobject,@opobjectid,@actiontype, @message)" />
+        <parameter>
+            <parameterName value="@log_date" />
+            <dbType value="DateTime" />
+            <layout type="log4net.Layout.RawTimeStampLayout" />
+        </parameter>
+        <parameter>
+            <parameterName value="@log_level" />
+            <dbType value="String" />
+            <size value="50" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%level" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@logger" />
+            <dbType value="String" />
+            <size value="255" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%logger" />
+            </layout>
+        </parameter>
+        
+        <parameter>
+            <parameterName value="@modulecode" />
+            <dbType value="String" />
+            <size value="40" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{ModuleCode}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@function" />
+            <dbType value="String" />
+            <size value="255" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{Function}" />
+            </layout>
+        </parameter>
+        
+        <parameter>
+            <parameterName value="@opuserid" />
+            <dbType value="Int16" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpUserID}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opusername" />
+            <dbType value="String" />
+            <size value="20" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpUserName}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opdeptid" />
+            <dbType value="Int16" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpDeptID}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opdeptname" />
+            <dbType value="String" />
+            <size value="50" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpDeptName}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opobject" />
+            <dbType value="String" />
+            <size value="25" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpObject}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@opobjectid" />
+            <dbType value="String" />
+            <size value="20" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{OpObjectID}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@actiontype" />
+            <dbType value="String" />
+            <size value="5" />
+            <layout type="nRelax.Tour.BLL.ReflectionLayout,nRelax.Tour.BLL">
+                <conversionPattern value="%property{ActionType}" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@message" />
+            <dbType value="String" />
+            <size value="8000" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%message" />
+            </layout>
+        </parameter>
+    </appender>
+
+  <appender name="FileAppender" type="log4net.Appender.RollingFileAppender">
+    <file value="log\Error\" />
+    <appendToFile value="true" />
+    <rollingStyle value="Date" />
+    <datePattern value="yyyyMMdd-Error'.txt'" />
+    <staticLogFileName value="false" />
+    <layout type="log4net.Layout.PatternLayout">
+      <conversionPattern value="记录时间：%date &#xD;&#xA;线程ID:[%thread]&#xD;&#xA;日志级别：%-5level &#xD;&#xA;错误描述：%message%newline&#xD;&#xA;" />
+    </layout>
+    <filter type="log4net.Filter.LevelRangeFilter">
+      <param name="LevelMin" value="ERROR" />
+      <param name="LevelMax" value="ERROR" />
+    </filter>
+  </appender>
+
+  <appender name="AdoNetAppender_SQLServer" type="log4net.Appender.AdoNetAppender">
+        <bufferSize value="0" />
+        <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <connectionString value="Persist Security Info=True;User ID=nrelaxloger;Password=nrelaxloger;Initial Catalog=nRelaxDB_LOG;Data Source=127.0.0.1" />
+        <commandText value="INSERT INTO Log ([Date],[Level],[Logger],[Message],[Exception]) VALUES (@log_date, @thread, @log_level, @logger, @message, @exception)" />
+        <parameter>
+            <parameterName value="@log_date" />
+            <dbType value="DateTime" />
+            <layout type="log4net.Layout.RawTimeStampLayout" />
+        </parameter>
+        <parameter>
+            <parameterName value="@thread" />
+            <dbType value="String" />
+            <size value="255" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%thread" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@log_level" />
+            <dbType value="String" />
+            <size value="50" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%level" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@logger" />
+            <dbType value="String" />
+            <size value="255" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%logger" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@message" />
+            <dbType value="String" />
+            <size value="8000" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%message" />
+            </layout>
+        </parameter>
+        <parameter>
+            <parameterName value="@exception" />
+            <dbType value="String" />
+            <size value="2000" />
+            <layout type="log4net.Layout.ExceptionLayout" />
+        </parameter>
+       
+    </appender>
+</log4net>

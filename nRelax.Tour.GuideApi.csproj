@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C0CE4A18-7B4C-48F6-9995-0AB26F8117CE}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>nRelax.Tour.GuideApi</RootNamespace>
+    <AssemblyName>nRelax.Tour.GuideApi</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+    <ExcludeApp_Data>true</ExcludeApp_Data>
+    <PublishDatabases>false</PublishDatabases>
+    <PackageAsSingleFile>true</PackageAsSingleFile>
+    <LangVersion>4</LangVersion>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Intelligencia.UrlRewriter">
+      <HintPath>..\..\Lib\Intelligencia.UrlRewriter.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.UI.WebControls, Version=1.0.2.226, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Microsoft.Web.UI.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.ByteCode.LinFu, Version=3.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NHibernate.ByteCode.LinFu.dll</HintPath>
+    </Reference>
+    <Reference Include="nRelax.Images.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\nRelax.ImgUpload\Img.Common\bin\Debug\nRelax.Images.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="nRelax.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\nRelax.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="nRelax.Org.Base">
+      <HintPath>..\..\nRelax.Org\nRelax.Org.Base\bin\nRelax.Org.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="nRelax.Org.Entity">
+      <HintPath>..\..\nRelax.Org\nRelax.Org.Entity\bin\nRelax.Org.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="nRelax.Org.SqlDAL">
+      <HintPath>..\..\nRelax.Org\nRelax.Org.SqlDAL\bin\nRelax.Org.SqlDAL.dll</HintPath>
+    </Reference>
+    <Reference Include="nRelax.SSO">
+      <HintPath>..\nRelax.SSO\bin\Debug\nRelax.SSO.dll</HintPath>
+    </Reference>
+    <Reference Include="Pipelines.Sockets.Unofficial, Version=1.0.0.0, Culture=neutral, PublicKeyToken=42ea0a778e13fbe2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pipelines.Sockets.Unofficial.2.2.2\lib\net461\Pipelines.Sockets.Unofficial.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core, Version=1.3.2.40943, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.2.6.90\lib\net461\StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Pipelines, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.5.0.1\lib\net461\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Channels, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Channels.5.0.0\lib\net461\System.Threading.Channels.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="guide.ashx.cs">
+      <DependentUpon>guide.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="mobile\api\ApiHttpHandle.cs" />
+    <Content Include="config\AppConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="config\SystemConfig.xml" />
+    <Content Include="guideapi.docx" />
+    <Content Include="guide.ashx" />
+    <Compile Include="Classes\License.cs" />
+    <Compile Include="Classes\Logger.cs" />
+    <Compile Include="Classes\SingleLogin.cs" />
+    <Compile Include="Classes\Thumbnail.cs" />
+    <Compile Include="Classes\UpLoad.cs" />
+    <Compile Include="Classes\UploadConfig.cs" />
+    <Compile Include="Classes\Utils.cs" />
+    <Compile Include="Classes\WaterMark.cs" />
+    <Compile Include="Classes\WebConfig.cs" />
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="mobile\api\~ajax.ashx.cs">
+      <DependentUpon>~ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\config\log4net.cfg.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="bin\hibernate.cfg.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="config\CommonConfig.xml" />
+    <Content Include="default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="config\log4net.cfg.xml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="login.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mobile\api\~ajax.ashx" />
+    <Content Include="license.sys" />
+    <Content Include="mobile\api\apidoc.docx" />
+    <Content Include="config\UploadConfig.json" />
+    <None Include="packages.config" />
+    <Content Include="readme.md" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
+    <Content Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\nRelax.BaseTools\nRelax.DevBase.BaseTools.csproj">
+      <Project>{b83538f3-c570-4754-a00c-e53403d93a89}</Project>
+      <Name>nRelax.DevBase.BaseTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nRelax.DAL\nRelax.DAL.csproj">
+      <Project>{3ef7b324-b1c2-46b8-9e95-205054d2a04b}</Project>
+      <Name>nRelax.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nRelax.SDK.WxPay\nRelax.SDK.WxPay.csproj">
+      <Project>{8a926e3a-420c-4c9d-990a-9186310fdd31}</Project>
+      <Name>nRelax.SDK.WxPay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nRelax.Tour.BLL\nRelax.Tour.BLL.csproj">
+      <Project>{EBC73A76-9ED1-449E-B305-6002882E2DC0}</Project>
+      <Name>nRelax.Tour.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nRelax.Tour.Entity\nRelax.Tour.Entity.csproj">
+      <Project>{3879c4e8-af0f-4958-8220-0654a61b56a6}</Project>
+      <Name>nRelax.Tour.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>8089</DevelopmentServerPort>
+          <DevelopmentServerVPath>/tour/</DevelopmentServerVPath>
+          <IISUrl>http://guide.duan.qs/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+</Project>
