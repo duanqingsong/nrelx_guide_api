@@ -172,6 +172,7 @@
       <DependentUpon>guide.ashx</DependentUpon>
     </Compile>
     <Compile Include="mobile\api\ApiHttpHandle.cs" />
+    <Content Include=".gitignore" />
     <Content Include="config\AppConfig.xml">
       <SubType>Designer</SubType>
     </Content>
