@@ -14,8 +14,8 @@ namespace nRelax.Tour.WebApp
 
             //在应用程序启动时运行的代码
             string sbinPath = Server.MapPath("~").TrimEnd('\\');
-            if (!sbinPath.ToLower().EndsWith("bin"))
-                sbinPath = sbinPath + "\\bin\\";
+            //if (!sbinPath.ToLower().EndsWith("bin"))
+            //    sbinPath = sbinPath + "\\bin\\";
             string sPath = System.IO.Path.Combine(sbinPath, "config\\log4net.cfg.xml");
             System.IO.FileInfo fi = new System.IO.FileInfo(sPath);
             if (fi.Exists)
@@ -100,13 +100,7 @@ namespace nRelax.Tour.WebApp
 
         protected void Session_End(object sender, EventArgs e)
         {
-            //在会话结束时运行的代码。 
-            // 注意: 只有在 Web.config 文件中的 sessionstate 模式设置为
-            // InProc 时，才会引发 Session_End 事件。如果会话模式 
-            //设置为 StateServer 或 SQLServer，则不会引发该事件。
-
-
-            nRelax.Tour.WebApp.SingleLogin.Clear();
+            
         }
 
         protected void Application_End(object sender, EventArgs e)

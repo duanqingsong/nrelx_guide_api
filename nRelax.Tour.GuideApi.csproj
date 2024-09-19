@@ -168,26 +168,27 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\GuideInfoService.cs" />
+    <Compile Include="Service\TourGroupBiz.cs" />
+    <Compile Include="Utils\ApiHttpHandle.cs" />
     <Compile Include="guide.ashx.cs">
       <DependentUpon>guide.ashx</DependentUpon>
     </Compile>
-    <Compile Include="mobile\api\ApiHttpHandle.cs" />
     <Content Include=".gitignore" />
     <Content Include="config\AppConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="config\log4net.cfg.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="config\SystemConfig.xml" />
     <Content Include="guideapi.docx" />
     <Content Include="guide.ashx" />
-    <Compile Include="Classes\License.cs" />
-    <Compile Include="Classes\Logger.cs" />
-    <Compile Include="Classes\SingleLogin.cs" />
-    <Compile Include="Classes\Thumbnail.cs" />
-    <Compile Include="Classes\UpLoad.cs" />
-    <Compile Include="Classes\UploadConfig.cs" />
-    <Compile Include="Classes\Utils.cs" />
-    <Compile Include="Classes\WaterMark.cs" />
-    <Compile Include="Classes\WebConfig.cs" />
+    <Compile Include="Utils\License.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\UpLoad.cs" />
+    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utils\WebConfig.cs" />
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -205,32 +206,19 @@
     <Compile Include="login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="mobile\api\~ajax.ashx.cs">
-      <DependentUpon>~ajax.ashx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\config\log4net.cfg.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="bin\hibernate.cfg.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="config\CommonConfig.xml" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="config\log4net.cfg.xml">
-      <SubType>
-      </SubType>
-    </Content>
     <Content Include="login.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="mobile\api\~ajax.ashx" />
     <Content Include="license.sys" />
-    <Content Include="mobile\api\apidoc.docx" />
-    <Content Include="config\UploadConfig.json" />
     <None Include="packages.config" />
     <Content Include="readme.md" />
     <Content Include="web.config">
@@ -257,11 +245,11 @@
       <Project>{8a926e3a-420c-4c9d-990a-9186310fdd31}</Project>
       <Name>nRelax.SDK.WxPay</Name>
     </ProjectReference>
-    <ProjectReference Include="..\nRelax.Tour.BLL\nRelax.Tour.BLL.csproj">
-      <Project>{EBC73A76-9ED1-449E-B305-6002882E2DC0}</Project>
+    <ProjectReference Include="..\TravelX\nRelax.Tour.BLL\nRelax.Tour.BLL.csproj">
+      <Project>{ebc73a76-9ed1-449e-b305-6002882e2dc0}</Project>
       <Name>nRelax.Tour.BLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\nRelax.Tour.Entity\nRelax.Tour.Entity.csproj">
+    <ProjectReference Include="..\TravelX\nRelax.Tour.Entity\nRelax.Tour.Entity.csproj">
       <Project>{3879c4e8-af0f-4958-8220-0654a61b56a6}</Project>
       <Name>nRelax.Tour.Entity</Name>
     </ProjectReference>

@@ -1,23 +1,16 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using nRelax.DAL;
 using nRelax.DevBase.BaseTools;
 using nRelax.Images.Common;
-using nRelax.Interface;
-using nRelax.Org.Entity;
-using nRelax.Org.SqlDAL;
-using nRelax.SDK.WxPay;
 using nRelax.SSO;
 using nRelax.Tour.BLL;
-using nRelax.Tour.BLL.API;
+using nRelax.Tour.GuideApi.Service;
 using nRelax.Tour.BLL.Enum;
 using nRelax.Tour.Entity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -30,8 +23,6 @@ namespace nRelax.Tour.WebApp
     /// </summary>
     public class GuideAjaxApi : ApiHttpHandle
     {
-        private decimal _Insur_Product_Id_Short = 0;
-        private decimal _Insur_Product_Id_Long = 0;
         private const string SSO_KEY = "sso_user_92382";
         private const int APP_MAX_REG_PERSON_COUNT = 5;
         private void SetSso()
@@ -220,10 +211,10 @@ namespace nRelax.Tour.WebApp
             }
             try
             {
-               
-                TourGroupBiz bizTourGroup = new TourGroupBiz();
+
+                TourGroupService tourGroupService = new TourGroupService();
                 
-                decimal guideId = bizTourGroup.GetGuideId(nTourGroupId);
+                decimal guideId = tourGroupService.GetGuideId(nTourGroupId);
                 if (guideId != nGuideId)
                 {
                     ReturnJsonResponse(new ApiListResult { success = 0, rows = new ArrayList(), errorcode = "只有導遊自己可以提交報賬" });
@@ -356,7 +347,7 @@ namespace nRelax.Tour.WebApp
         }
 
         /// <summary>
-        /// 根據id獲取雜費項目
+        /// 根據id獲取雜費項目 G015
         /// </summary>
         private void GetTourGroupOtherFeeItem()
         {
@@ -388,13 +379,14 @@ namespace nRelax.Tour.WebApp
             {
 
                 TourGroupOtherFeeBiz biz = new TourGroupOtherFeeBiz();
-                TourGroupBiz bizTourGroup = new TourGroupBiz();
+                TourGroupService bizTourGroup = new TourGroupService();
                 TourGroupOtherFee tourGroupOtherFee = new TourGroupOtherFee();
 
                 tourGroupOtherFee = biz.GetByID(nId);
                 decimal nTourGroupId = tourGroupOtherFee.TourGroupID;
 
-                int status = bizTourGroup.GetStatus(nTourGroupId);
+                int tourGroupStatus = bizTourGroup.GetStatus(nTourGroupId);
+                int applyFeeStatus=bizTourGroup.GetApplyFeeStatus(nTourGroupId);
                 decimal guideId = bizTourGroup.GetGuideId(nTourGroupId);
                 if (guideId != nGuideId)
                 {
@@ -417,7 +409,9 @@ namespace nRelax.Tour.WebApp
                     remark = item.Remark,
                     amount = item.Amount,
                     dir = item.Dir,
-                    status = item.Status,
+                    tourGroupStatus,
+                    applyFeeStatus,
+                    status =item.Status,
                     tickets = item.TicketUrl,
                     ticketUrls = item.TicketUrl.Length > 0 ? item.TicketUrl.Split('|') : new string[] { },
                     currency = item.Currency,
@@ -541,7 +535,7 @@ namespace nRelax.Tour.WebApp
                 sTotalRmb = sTotalRmb == null ? "0" : sTotalRmb;
 
                 //導遊借款
-                string guideAdvanceFee = TourGroupBiz.GetFieldValue("obj.GuideAdvanceFee", string.Format("obj.Id={0}", nTourGroupId));
+                string guideAdvanceFee = TourGroupService.GetFieldValue("obj.GuideAdvanceFee", string.Format("obj.Id={0}", nTourGroupId));
                 guideAdvanceFee = guideAdvanceFee == null ? "0" : guideAdvanceFee;
 
                 decimal totalGuideReturnAmount = -1 * (StringTool.String2Decimal(sTotalRmb) + StringTool.String2Decimal(guideAdvanceFee));
@@ -595,7 +589,7 @@ namespace nRelax.Tour.WebApp
             {
 
                 TourGroupOtherFeeBiz biz = new TourGroupOtherFeeBiz();
-                TourGroupBiz bizTourGroup = new TourGroupBiz();
+                TourGroupService bizTourGroup = new TourGroupService();
                 TourGroupOtherFee tourGroupOtherFee = new TourGroupOtherFee();
                 tourGroupOtherFee = biz.GetByID(nId);
                 decimal nTourGroupId = tourGroupOtherFee.TourGroupID;
@@ -675,7 +669,7 @@ namespace nRelax.Tour.WebApp
             try
             {
                 TourGroupOtherFeeBiz bizOtherFee = new TourGroupOtherFeeBiz();
-                TourGroupBiz bizTourGroup = new TourGroupBiz();
+                TourGroupService bizTourGroup = new TourGroupService();
                 TourGroupOtherFee tourGroupOtherFee = new TourGroupOtherFee();
                 if (nId == 0 && poBillId>0) {
                     //新增 檢查採購單是否已經報過賬，防止多次報賬
@@ -740,7 +734,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "幣種不能為空" });
                     return;
                 }
-                string guideName = new GuideInfoBiz().GetGuideName(nGuideId);
+                string guideName = new GuideInfoService().GetGuideName(nGuideId);
 
                 tourGroupOtherFee.Amount = nAmount;
                 tourGroupOtherFee.Dir = nDir;
@@ -880,7 +874,7 @@ namespace nRelax.Tour.WebApp
                 //轉繁體
                 string ftname = StringTool.ToTChinese(name);
 
-                DataTable dt = new GuideInfoBiz().GetGuideByMobileNameAndTourCode(name, ftname, mobile, tourcode);
+                DataTable dt = new GuideInfoService().GetGuideByMobileNameAndTourCode(name, ftname, mobile, tourcode);
                 if (dt.Rows.Count > 0)
                 {
                     DataRow row = dt.Rows[0];
@@ -919,7 +913,7 @@ namespace nRelax.Tour.WebApp
                     return;
                 }
               
-                DataTable dt = new GuideInfoBiz().GetGuideByMobile(mobile);
+                DataTable dt = new GuideInfoService().GetGuideByMobile(mobile);
                 if (dt.Rows.Count > 0)
                 {
                     DataRow row = dt.Rows[0];
@@ -956,7 +950,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1015,7 +1009,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1166,7 +1160,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1259,7 +1253,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1317,10 +1311,10 @@ namespace nRelax.Tour.WebApp
                     }
                 }
                 //計劃中的景點備註
-                string stgticketremark = TourGroupBiz.GetFieldValue("obj.RemarkTicket", tgid);
+                string stgticketremark = TourGroupService.GetFieldValue("obj.RemarkTicket", tgid);
                 //景點預訂全局備註
                 string sTicketResume = new DocumentBiz().GetContentByType(EnuDocumentType.TourGroupBillTicketRemark);
-                string strTgCatalog = TourGroupBiz.GetFieldValue("obj.Catalog", tgid);
+                string strTgCatalog = TourGroupService.GetFieldValue("obj.Catalog", tgid);
                 string sCatalogRemark = string.Empty;
                 if (strTgCatalog != "")
                 {
@@ -1363,7 +1357,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1426,10 +1420,10 @@ namespace nRelax.Tour.WebApp
                     }
                 }
                 //計劃中的住宿備註
-                string stgrepeastremark = TourGroupBiz.GetFieldValue("obj.RemarkRepast", tgid);
+                string stgrepeastremark = TourGroupService.GetFieldValue("obj.RemarkRepast", tgid);
                 //酒店預訂全局備註
                 string sRepeastResume = new DocumentBiz().GetContentByType(EnuDocumentType.TourGroupBillRepastRemark);
-                string strTgCatalog = TourGroupBiz.GetFieldValue("obj.Catalog", tgid);
+                string strTgCatalog = TourGroupService.GetFieldValue("obj.Catalog", tgid);
                 string sCatalogRemark = string.Empty;
                 if (strTgCatalog != "")
                 {
@@ -1472,7 +1466,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1546,10 +1540,10 @@ namespace nRelax.Tour.WebApp
                     }
                 }
                 //計劃中的住宿備註
-                string stghotelremark = TourGroupBiz.GetFieldValue("obj.RemarkHotel", tgid);
+                string stghotelremark = TourGroupService.GetFieldValue("obj.RemarkHotel", tgid);
                 //酒店預訂全局備註
                 string sHotelResume = new DocumentBiz().GetContentByType(EnuDocumentType.TourGroupBillHotelRemark);
-                string strTgCatalog = TourGroupBiz.GetFieldValue("obj.Catalog", tgid);
+                string strTgCatalog = TourGroupService.GetFieldValue("obj.Catalog", tgid);
                 string sCatalogRemark = string.Empty;
                 if (strTgCatalog != "")
                 {
@@ -1592,7 +1586,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                string sguideid = TourGroupBiz.GetFieldValue("obj.GuideID", tgid);
+                string sguideid = TourGroupService.GetFieldValue("obj.GuideID", tgid);
                 if (StringTool.String2Decimal(sguideid) != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
@@ -1654,15 +1648,15 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-                TourGroup tg = new TourGroupBiz().GetByID(tgid);
+                TourGroup tg = new TourGroupService().GetByID(tgid);
                 if (tg.GuideID != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
                 string scode = TourBiz.GetFieldValue("obj.ProductCode", tg.ProductID);
-                string strRDCatalog = TourGroupBiz.GetFieldValue("obj.RDCatalog", tgid);
-                string strTgCatalog = TourGroupBiz.GetFieldValue("obj.Catalog", tgid);
+                string strRDCatalog = TourGroupService.GetFieldValue("obj.RDCatalog", tgid);
+                string strTgCatalog = TourGroupService.GetFieldValue("obj.Catalog", tgid);
                 string strRDRemark = string.Empty, strCatalogRemark = string.Empty;
                 //系列線-团备注
                 if (Convert.ToInt32(strRDCatalog) == (int)EnuTourRDCatalog.LingXieTuan)
@@ -1762,7 +1756,7 @@ namespace nRelax.Tour.WebApp
             }
             try
             {
-                DataTable dt = new TourGroupBiz().GetListByGuideID(nGuideId);
+                DataTable dt = new TourGroupService().GetListByGuideID(nGuideId);
                 if (dt != null)
                 {
                     DataView dv = new DataView(dt);
@@ -1805,7 +1799,7 @@ namespace nRelax.Tour.WebApp
         }
 
         /// <summary>
-        /// 獲取可以報賬的團列表
+        /// 獲取可以報賬的團列表(G012)
         /// 已經出發+已經結束10天內
         /// </summary>
         private void GetGuideFeeTourGroupList()
@@ -1830,7 +1824,7 @@ namespace nRelax.Tour.WebApp
             }
             try
             {
-                DataTable dt = new TourGroupBiz().GetCanFeeListByGuideID(nGuideId);
+                DataTable dt = new TourGroupService().GetCanFeeListByGuideID(nGuideId);
                 if (dt != null)
                 {
                     DataView dv = new DataView(dt);
@@ -1893,7 +1887,7 @@ namespace nRelax.Tour.WebApp
             string unionid = GetQueryString("unionid");
             decimal nGuideId = GetQueryDecimal("guideid");
             string sWhere = string.Format("obj.UnionId='{0}'", unionid.Replace("'", "''"));
-            string sid = GuideInfoBiz.GetFieldValue("obj.Id", sWhere);
+            string sid = GuideInfoService.GetFieldValue("obj.Id", sWhere);
             if (sid == nGuideId.ToString())
             {
                 return true;
@@ -1922,7 +1916,7 @@ namespace nRelax.Tour.WebApp
                         return;
                     }
                 }
-                GuideInfoBiz biz = new GuideInfoBiz();
+                GuideInfoService biz = new GuideInfoService();
                 GuideInfo guide  = biz.GetByMobileNoAndUpdateUnionId(mobileno, unionid);
                 if (guide !=null)
                 {
@@ -2039,22 +2033,10 @@ namespace nRelax.Tour.WebApp
         /// <returns></returns>
         private string MiniAppLogin(string strappid)
         {
-            ///todo 寫死的要放到配置文件
-            string Appid = "wx7f568e39b2ff0a47";
-            string SecretKey = "7ede83327ba53d080741852db29a5e2e";
-            switch (strappid)
-            {
-                case "1": //留位小程序
-                    Appid = WebConfig.MiniAppId;
-                    SecretKey = WebConfig.MiniAppKey;
-                    break;
-                case "2": //导游助手小程序
-                    Appid = WebConfig.GuideAppId;
-                    SecretKey = WebConfig.GuideAppKey;
-                    break;
-                default:
-                    break;
-            }
+        
+            //case "2": //导游助手小程序
+            string Appid = WebConfig.GuideAppId;
+            string SecretKey = WebConfig.GuideAppKey;
             string code = GetQueryString("code").Replace("%2B", "+");
             string grant_type = "authorization_code";
             string url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + Appid + "&secret=" + SecretKey + "&js_code=" + code + "&grant_type=" + grant_type;
@@ -2126,7 +2108,7 @@ namespace nRelax.Tour.WebApp
             try
             {
                 string unionid = GetQueryString("unionid");
-                GuideInfoBiz biz = new GuideInfoBiz();
+                GuideInfoService biz = new GuideInfoService();
                 GuideInfo guide = biz.GetByWeChatUnionId(unionid);
                 if (guide != null)
                 {
