@@ -60,7 +60,7 @@ namespace nRelax.Tour.WebApp
         private static string BuildMessage(string strMessage, string sType)
         {
             StringBuilder sbErrInfo = new StringBuilder();
-            sbErrInfo.Append(Environment.NewLine + "<=====================================" + System.DateTime.Now.ToString() + "=============================================>");
+            sbErrInfo.Append(Environment.NewLine + "Time:" + System.DateTime.Now.ToString() );
             sbErrInfo.Append(Environment.NewLine + "Level: " + sType);
             sbErrInfo.Append(Environment.NewLine + "URL: " + HttpContext.Current.Request.Url.ToString());
             sbErrInfo.Append(Environment.NewLine + "Message: " + strMessage);
