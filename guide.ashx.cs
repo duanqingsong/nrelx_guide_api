@@ -4,9 +4,9 @@ using nRelax.DevBase.BaseTools;
 using nRelax.Images.Common;
 using nRelax.SSO;
 using nRelax.Tour.BLL;
-using nRelax.Tour.GuideApi.Service;
 using nRelax.Tour.BLL.Enum;
 using nRelax.Tour.Entity;
+using nRelax.Tour.GuideApi.Service;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +24,6 @@ namespace nRelax.Tour.WebApp
     public class GuideAjaxApi : ApiHttpHandle
     {
         private const string SSO_KEY = "sso_user_92382";
-        private const int APP_MAX_REG_PERSON_COUNT = 5;
         private void SetSso()
         {
             string sLoginName = ConfigBiz.AppUser;
@@ -59,7 +58,7 @@ namespace nRelax.Tour.WebApp
                 Logger.Error("时间戳不能为空");
                 return;
             }
-  
+
             bool check = CheckSign();
             if (!check)
             {
@@ -88,7 +87,7 @@ namespace nRelax.Tour.WebApp
                 case "0003": //openid,data,iv,key
                     LoginByMiniPhone();
                     break;
-      
+
                 case "G000":
                     //身份认证: 通过 手机号码,姓名,负责团号认证 获取此导游属于哪家公司
                     GetGuideInfoByMobileNoAndProductCode();
@@ -172,17 +171,17 @@ namespace nRelax.Tour.WebApp
                     //{totalRMB:人民幣總匯總(負支出,正收入),guideAdvanceFee:導遊借款,returnGuideFee:應退導遊(如果負值,導遊會退公司)}
                     GetTourGroupTotalFee();
                     break;
-       
-                
+
+
                 default:
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.NO_ACTION });
                     break;
-               
+
 
             }
         }
-        
-        
+
+
         /// <summary>
         /// 獲取未報賬的採購單
         /// G019
@@ -213,7 +212,7 @@ namespace nRelax.Tour.WebApp
             {
 
                 TourGroupService tourGroupService = new TourGroupService();
-                
+
                 decimal guideId = tourGroupService.GetGuideId(nTourGroupId);
                 if (guideId != nGuideId)
                 {
@@ -227,15 +226,16 @@ namespace nRelax.Tour.WebApp
                 {
                     ReturnJsonResponse(new ApiListResult { success = 1, rows = dt, errorcode = ErrorCode.EMPTY });
                 }
-                else {
+                else
+                {
                     ReturnJsonResponse(new ApiListResult { success = 1, rows = new ArrayList(), errorcode = ErrorCode.EMPTY });
                 }
-                
+
             }
             catch (Exception ex)
             {
                 LogError(ex);
-                ReturnJsonResponse(new ApiListResult { success = 0,rows = "", errorcode = ErrorCode.SYSTEM_ERROR });
+                ReturnJsonResponse(new ApiListResult { success = 0, rows = "", errorcode = ErrorCode.SYSTEM_ERROR });
             }
         }
 
@@ -267,17 +267,19 @@ namespace nRelax.Tour.WebApp
             }
             try
             {
-                
+
                 TourGroupOtherFeeBiz biz = new TourGroupOtherFeeBiz();
                 string error = biz.submmitTourGroupOtherFee(nGuideId, nTourGroupId);
 
                 if (error == "")
                     ReturnJsonResponse(new ApiResult { success = 1, data = "success", errorcode = ErrorCode.EMPTY });
-                else {
+                else
+                {
                     ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = error });
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LogError(ex);
                 ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = ErrorCode.SYSTEM_ERROR });
             }
@@ -290,37 +292,38 @@ namespace nRelax.Tour.WebApp
         private void UploadOtherFeeTicketImage()
         {
             decimal nGuideId = GetQueryDecimal("guideid");
-           // string ssuffix = GetQueryString("suffix");
+            // string ssuffix = GetQueryString("suffix");
             //string sfiledata = GetQueryString("filedata");
             string strUnionId = GetQueryString("unionid");
-            
+
             if (nGuideId == 0)
             {
-                ReturnJsonResponse(new ApiResult { success = 0, data ="缺少參數[缺導遊Id]", errorcode = ErrorCode.ERROR_PARAM });
+                ReturnJsonResponse(new ApiResult { success = 0, data = "缺少參數[缺導遊Id]", errorcode = ErrorCode.ERROR_PARAM });
                 return;
             }
             try
             {
-             
-                int fileCount=HttpContext.Current.Request.Files.Count;
+
+                int fileCount = HttpContext.Current.Request.Files.Count;
                 ArrayList result = new ArrayList();
                 string errorMessage = "";
-         
+
                 for (int i = 0; i < fileCount; i++)
                 {
                     HttpPostedFile file = HttpContext.Current.Request.Files[i];
                     byte[] byteFile = ByteFiles(file);
                     string sfiledata = Convert.ToBase64String(byteFile);
                     string ssuffix = GetFileExt(file.FileName);
-                    
+
                     string smsg = new UpLoad().UploadBase64File(sfiledata, "", ssuffix, false, Enums.UploadType.App, "");
                     FileUploadResult uploadResult = JsonConvert.DeserializeObject<FileUploadResult>(smsg);
-                    Logger.Error("p03 uploadResult" + uploadResult==null?"null":"not null");
+                    Logger.Error("p03 uploadResult" + uploadResult == null ? "null" : "not null");
                     if (uploadResult.status == 1)
                     {
                         result.Add(uploadResult.path);
                     }
-                    else {
+                    else
+                    {
                         errorMessage = uploadResult.msg;
                     }
                 }
@@ -333,7 +336,8 @@ namespace nRelax.Tour.WebApp
                         errorcode = ErrorCode.EMPTY
                     });
                 }
-                else {
+                else
+                {
                     Logger.Error(errorMessage);
                     ReturnJsonResponse(new ApiResult { success = 0, data = errorMessage, errorcode = ErrorCode.SYSTEM_ERROR });
 
@@ -386,24 +390,25 @@ namespace nRelax.Tour.WebApp
                 decimal nTourGroupId = tourGroupOtherFee.TourGroupID;
 
                 int tourGroupStatus = bizTourGroup.GetStatus(nTourGroupId);
-                int applyFeeStatus=bizTourGroup.GetApplyFeeStatus(nTourGroupId);
+                int applyFeeStatus = bizTourGroup.GetApplyFeeStatus(nTourGroupId);
                 decimal guideId = bizTourGroup.GetGuideId(nTourGroupId);
                 if (guideId != nGuideId)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "只有導遊自己可以查看自己的報賬" });
                     return;
                 }
-               
+
 
                 //獲取費用信息
-                TourGroupOtherFee item= biz.GetByID(nId);
+                TourGroupOtherFee item = biz.GetByID(nId);
                 Dictionary<string, object> poInfo = new Dictionary<string, object>();
                 if (item.PoBillId > 0 && !string.IsNullOrEmpty(item.PoBillType))
                 {
                     poInfo = biz.getPoBillInfo(item.PoBillId, item.PoBillType);
                 }
 
-                var result = new {
+                var result = new
+                {
                     id = item.Id,
                     resume = item.FeeResume,
                     remark = item.Remark,
@@ -411,14 +416,14 @@ namespace nRelax.Tour.WebApp
                     dir = item.Dir,
                     tourGroupStatus,
                     applyFeeStatus,
-                    status =item.Status,
+                    status = item.Status,
                     tickets = item.TicketUrl,
                     ticketUrls = item.TicketUrl.Length > 0 ? item.TicketUrl.Split('|') : new string[] { },
                     currency = item.Currency,
                     suppliersID = item.SuppliersID,
                     suppliersName = item.SuppliersName,
-                    suppliersType=item.PoBillType,
-                    poBillId =item.PoBillId,
+                    suppliersType = item.PoBillType,
+                    poBillId = item.PoBillId,
                     poInfo
                 };
                 ReturnJsonResponse(new ApiResult { success = 1, data = result, errorcode = ErrorCode.EMPTY });
@@ -430,7 +435,7 @@ namespace nRelax.Tour.WebApp
             }
         }
 
-        
+
         /// <summary>
         /// 獲取團對應的雜費列表
         /// </summary>
@@ -462,7 +467,7 @@ namespace nRelax.Tour.WebApp
 
                 IList lstFee = biz.GetByTourGroupId(nTourGroupId);
                 ArrayList result = new ArrayList();
-                if(lstFee!=null && lstFee.Count > 0)
+                if (lstFee != null && lstFee.Count > 0)
                 {
                     foreach (TourGroupOtherFee item in lstFee)
                     {
@@ -489,7 +494,7 @@ namespace nRelax.Tour.WebApp
                         });
                     }
                 }
-                
+
                 ReturnJsonResponse(new ApiListResult { success = 1, rows = result, errorcode = ErrorCode.EMPTY });
 
             }
@@ -531,7 +536,7 @@ namespace nRelax.Tour.WebApp
                 TourGroupOtherFeeBiz biz = new TourGroupOtherFeeBiz();
                 string sWhere = string.Format("obj.Currency='RMB' and obj.TourGroupID={0}", nTourGroupId);
                 //人民幣費用(-支出)
-                string sTotalRmb=biz.GetFieldSUM("obj.Dir*obj.Amount", sWhere);
+                string sTotalRmb = biz.GetFieldSUM("obj.Dir*obj.Amount", sWhere);
                 sTotalRmb = sTotalRmb == null ? "0" : sTotalRmb;
 
                 //導遊借款
@@ -540,10 +545,11 @@ namespace nRelax.Tour.WebApp
 
                 decimal totalGuideReturnAmount = -1 * (StringTool.String2Decimal(sTotalRmb) + StringTool.String2Decimal(guideAdvanceFee));
 
-                var result = new {
-                    totalRMB= StringTool.String2Decimal(sTotalRmb).ToString("f2").Replace(".00",""), //人民幣總匯總(負支出,正收入)
-                    guideAdvanceFee= StringTool.String2Decimal(guideAdvanceFee).ToString("f2").Replace(".00", ""),//導遊借款
-                    returnGuideFee= totalGuideReturnAmount.ToString("f2").Replace(".00", "")//應退導遊(如果負值,導遊會退公司)
+                var result = new
+                {
+                    totalRMB = StringTool.String2Decimal(sTotalRmb).ToString("f2").Replace(".00", ""), //人民幣總匯總(負支出,正收入)
+                    guideAdvanceFee = StringTool.String2Decimal(guideAdvanceFee).ToString("f2").Replace(".00", ""),//導遊借款
+                    returnGuideFee = totalGuideReturnAmount.ToString("f2").Replace(".00", "")//應退導遊(如果負值,導遊會退公司)
                 };
 
                 ReturnJsonResponse(new ApiResult { success = 1, data = result, errorcode = ErrorCode.EMPTY });
@@ -593,10 +599,11 @@ namespace nRelax.Tour.WebApp
                 TourGroupOtherFee tourGroupOtherFee = new TourGroupOtherFee();
                 tourGroupOtherFee = biz.GetByID(nId);
                 decimal nTourGroupId = tourGroupOtherFee.TourGroupID;
-                
+
                 int status = bizTourGroup.GetStatus(nTourGroupId);
                 decimal guideId = bizTourGroup.GetGuideId(nTourGroupId);
-                if (guideId != nGuideId) {
+                if (guideId != nGuideId)
+                {
                     ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "只有導遊自己可以刪除" });
                     return;
                 }
@@ -671,7 +678,8 @@ namespace nRelax.Tour.WebApp
                 TourGroupOtherFeeBiz bizOtherFee = new TourGroupOtherFeeBiz();
                 TourGroupService bizTourGroup = new TourGroupService();
                 TourGroupOtherFee tourGroupOtherFee = new TourGroupOtherFee();
-                if (nId == 0 && poBillId>0) {
+                if (nId == 0 && poBillId > 0)
+                {
                     //新增 檢查採購單是否已經報過賬，防止多次報賬
                     //要穿nTourGroupId ,po預訂單中有一個po訂單對應多個團的情況
                     bool isFeed = bizOtherFee.IsPoBillIdExist(poBillId, suppliersType, nTourGroupId);
@@ -713,18 +721,20 @@ namespace nRelax.Tour.WebApp
                     planStatus == EnuTourPlanStatus.Closed ||
                     planStatus == EnuTourPlanStatus.Hung ||
                     planStatus == EnuTourPlanStatus.WillCancel ||
-                    planStatus == EnuTourPlanStatus.WillSale) {
+                    planStatus == EnuTourPlanStatus.WillSale)
+                {
 
-                    string strStaus=UseEnum.EnuToString(planStatus);
-                    ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "團的狀態為【"+ strStaus + "】不符合報賬要求" });
+                    string strStaus = UseEnum.EnuToString(planStatus);
+                    ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "團的狀態為【" + strStaus + "】不符合報賬要求" });
                     return;
                 }
 
-                if (nAmount <= 0) {
+                if (nAmount <= 0)
+                {
                     ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "金額錯誤" });
                     return;
                 }
-                if (strResume.Trim().Length== 0)
+                if (strResume.Trim().Length == 0)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = "費用說明不能為空" });
                     return;
@@ -752,11 +762,11 @@ namespace nRelax.Tour.WebApp
                 tourGroupOtherFee.PoBillId = poBillId;
                 tourGroupOtherFee.PoBillType = suppliersType;
 
-                decimal newId =bizOtherFee.Save(tourGroupOtherFee);
+                decimal newId = bizOtherFee.Save(tourGroupOtherFee);
 
-                
+
                 ReturnJsonResponse(new ApiResult() { success = 1, data = newId, errorcode = ErrorCode.EMPTY });
-              
+
             }
             catch (Exception ex)
             {
@@ -768,8 +778,9 @@ namespace nRelax.Tour.WebApp
         /// <summary>
         /// 获取留位小程序Session Key
         /// </summary>
-        private void GetMiniLoginInfo() {
-   
+        private void GetMiniLoginInfo()
+        {
+
             string result = MiniAppLogin("1");
             if (result.Trim().Length > 0)
             {
@@ -777,7 +788,7 @@ namespace nRelax.Tour.WebApp
                 string openid = jo.GetValue("openid").ToString();
                 decimal memberId = 0;
                 string phone = "";
-                Members member= new MemberBiz().GetByWeChatUnionId(openid);
+                Members member = new MemberBiz().GetByWeChatUnionId(openid);
                 if (member != null)
                 {
                     memberId = member.Id;
@@ -790,11 +801,12 @@ namespace nRelax.Tour.WebApp
                     expiresIn = jo.GetValue("expires_in"),
                     openid = openid,
                     phone = phone,
-                    memberId= memberId
+                    memberId = memberId
                 };
                 ReturnJsonResponse(new ApiResult { success = 1, data = data, errorcode = ErrorCode.EMPTY });
             }
-            else {
+            else
+            {
                 ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
             }
         }
@@ -802,12 +814,14 @@ namespace nRelax.Tour.WebApp
         /// <summary>
         /// 003 解密小程序手机号码,並註冊或登錄
         /// </summary>
-        private void LoginByMiniPhone() {
-           
+        private void LoginByMiniPhone()
+        {
+
             string openId = GetQueryString("openid");
             try
             {
-                if (openId.Trim().Length == 0) {
+                if (openId.Trim().Length == 0)
+                {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
@@ -817,22 +831,22 @@ namespace nRelax.Tour.WebApp
                 {
                     //写会员数据
                     MemberBiz biz = new MemberBiz();
-                    decimal nPayId = 0; //支付單
-                    decimal nMemberId = biz.RegisterFromApp_Simple(phone, out nPayId, openId);
+                    decimal nMemberId = biz.RegisterFromAppByMobile(phone, openId);
                     if (nMemberId == 0)
                     {
                         ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_CREATE_MEMBER });
                         return;
                     }
 
-                    ReturnJsonResponse(new ApiResult { success = 1, data = new { phone=phone,memberId=nMemberId }, errorcode = ErrorCode.EMPTY });
+                    ReturnJsonResponse(new ApiResult { success = 1, data = new { phone = phone, memberId = nMemberId }, errorcode = ErrorCode.EMPTY });
                 }
-                else {
+                else
+                {
                     //获取手机号码失败
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_GETPHONE });
                     return;
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -840,8 +854,8 @@ namespace nRelax.Tour.WebApp
                 ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.SYSTEM_ERROR });
             }
         }
-       
-        
+
+
 
         /// <summary>
         /// //身份认证 通过 手机号码,姓名,负责团号认证 获取此导游属于哪家公司 
@@ -912,7 +926,7 @@ namespace nRelax.Tour.WebApp
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
                     return;
                 }
-              
+
                 DataTable dt = new GuideInfoService().GetGuideByMobile(mobile);
                 if (dt.Rows.Count > 0)
                 {
@@ -958,7 +972,7 @@ namespace nRelax.Tour.WebApp
                 }
                 SendGroupBillBiz sgbb = new SendGroupBillBiz();
                 DataTable dtLinkerInfo = sgbb.GetTourGroupAllLinkInfo(tgid);
-                
+
                 IList list = new ArrayList();
                 foreach (DataRow item in dtLinkerInfo.Rows)
                 {
@@ -973,12 +987,12 @@ namespace nRelax.Tour.WebApp
                     {
                         coname = item["CompanyName"],
                         linkname = item["LinkName"].ToString().Replace("/", "").Trim().Length == 0 ? "" : item["LinkName"].ToString(),
-                        linktel = item["LinkTel"].ToString().Replace("/","").Trim().Length==0?a:item["LinkTel"].ToString().Split('/'),
+                        linktel = item["LinkTel"].ToString().Replace("/", "").Trim().Length == 0 ? a : item["LinkTel"].ToString().Split('/'),
                         address = item["Address"].ToString().Replace("/", "").Trim().Length == 0 ? "" : item["Address"].ToString(),
                     };
                     list.Add(data);
                 }
-                    
+
                 var result = new
                 {
                     tgid = tgid,
@@ -1631,7 +1645,7 @@ namespace nRelax.Tour.WebApp
             }
         }
 
-        
+
 
         /// <summary>
         /// 获取导游出团的团详情 G004
@@ -1664,7 +1678,7 @@ namespace nRelax.Tour.WebApp
                 //另寫線-团备注
                 else if (Convert.ToInt32(strRDCatalog) == (int)EnuTourRDCatalog.XiLieTuan)
                     strRDRemark = new DocumentBiz().GetContentByType(EnuDocumentType.XiLieTourRemark);
-                  
+
                 //短線(省內)出團備註
                 if (Convert.ToInt32(strTgCatalog) == (int)EnuTourCatalog.ThisProvince)
                     strCatalogRemark = new DocumentBiz().GetContentByType(EnuDocumentType.ShortTourRemark);
@@ -1683,7 +1697,7 @@ namespace nRelax.Tour.WebApp
                     startdate = tg.StartDate,
                     startdate_wk = DateTimeTool.GetWeekdayCN(tg.StartDate),
                     //距离今天的天数
-                    startdate_days =(tg.StartDate - DateTime.Today).Days,
+                    startdate_days = (tg.StartDate - DateTime.Today).Days,
                     starttime = tg.StartTime,
                     guideid = tg.GuideID,
                     processdays = tg.ProcessDays,
@@ -1692,30 +1706,30 @@ namespace nRelax.Tour.WebApp
                     childqty = tg.ChildCount,
 
                     addbedqty = tg.AddBedCount,//加床數
-                    roomcount =tg.RoomCount, //標雙
-                    bigbedroomcount =tg.BigBedRoomCount, //大床房
-                    halfcount =tg.HalfCount, //半房
-                    addroomcount =tg.AddRoomCount,//房差數
+                    roomcount = tg.RoomCount, //標雙
+                    bigbedroomcount = tg.BigBedRoomCount, //大床房
+                    halfcount = tg.HalfCount, //半房
+                    addroomcount = tg.AddRoomCount,//房差數
 
                     bbqty = tg.BBCount,
                     oldqty = tg.OlderCount,
                     oldqty2 = tg.OlderCount2,
 
                     remark = tg.Remark,
-                    remarkall=tg.RemarkAll,
-                    objectresume=tg.ObjectResume,//領用物品
+                    remarkall = tg.RemarkAll,
+                    objectresume = tg.ObjectResume,//領用物品
                     rdremark = strRDRemark, //系列線 另寫線 備註 HTML
-                    catalogremark= strCatalogRemark, //長短線 備註 HTML
+                    catalogremark = strCatalogRemark, //長短線 備註 HTML
                     deptcontactinfo = sContactInfo, //各部門聯繫電話 HTML
 
                     //導遊借款
                     guideadvancedate = DateTimeTool.FormatString(tg.GuideAdvanceDate),
-                    guideadvancefee=tg.GuideAdvanceFee,
-                    guideadvancehander=tg.GuideAdvanceHander,
-                    guideadvanceremark=tg.GuideAdvanceRemark,
+                    guideadvancefee = tg.GuideAdvanceFee,
+                    guideadvancehander = tg.GuideAdvanceHander,
+                    guideadvanceremark = tg.GuideAdvanceRemark,
 
-                    btsalesmanname =tg.BTSalesmanName, //包團營銷員
-                    btgroupname=tg.BTGroupName, //包團組號
+                    btsalesmanname = tg.BTSalesmanName, //包團營銷員
+                    btgroupname = tg.BTGroupName, //包團組號
                     isbookhotel = tg.IsHotelFinish ? 1 : 0,
                     isbookrepast = tg.IsRestaurantFinish ? 1 : 0,
                     isbookticket = tg.IsTicketObjectFinish ? 1 : 0,
@@ -1764,7 +1778,8 @@ namespace nRelax.Tour.WebApp
                     ArrayList lst = new ArrayList();
                     foreach (DataRowView item in dv)
                     {
-                        var data = new {
+                        var data = new
+                        {
                             tgid = item["tgid"],
                             productcode = item["productcode"],
                             productname = item["productname"],
@@ -1774,10 +1789,10 @@ namespace nRelax.Tour.WebApp
                             startdate = item["startdate"],
                             status = item["status"],//1 --未出发 0 --进行中 2 --已出发
 
-                            startdate_wk =DateTimeTool.GetWeekdayCN(item["startdate"]),
+                            startdate_wk = DateTimeTool.GetWeekdayCN(item["startdate"]),
                             //距离今天的天数
-                            startdate_days = 
-                                (Convert.ToDateTime(item["startdate"])-DateTime.Today).Days,
+                            startdate_days =
+                                (Convert.ToDateTime(item["startdate"]) - DateTime.Today).Days,
 
                         };
                         lst.Add(data);
@@ -1830,13 +1845,14 @@ namespace nRelax.Tour.WebApp
                     DataView dv = new DataView(dt);
                     dv.Sort = "Status,StartDate desc";
                     ArrayList lst = new ArrayList();
-                    TourGroupOtherFeeCheckLogBiz tourGroupOtherFeeCheckLogBiz=new TourGroupOtherFeeCheckLogBiz();
+                    TourGroupOtherFeeCheckLogBiz tourGroupOtherFeeCheckLogBiz = new TourGroupOtherFeeCheckLogBiz();
                     foreach (DataRowView item in dv)
                     {
                         decimal tgid = Convert.ToDecimal(item["tgid"]);
                         string cancelreason = "";
                         int isCanceled = item["ApplyFeeIsCancel"] == null ? 0 : Convert.ToInt32(item["ApplyFeeIsCancel"]); //是否被退回
-                        if (isCanceled == 1) {
+                        if (isCanceled == 1)
+                        {
                             //獲取退回原因
                             cancelreason = tourGroupOtherFeeCheckLogBiz.getLastLogRemark(tgid);
                         }
@@ -1850,9 +1866,9 @@ namespace nRelax.Tour.WebApp
                             processdays = item["processdays"],
                             startdate = item["startdate"],
                             status = item["status"],//1 --未出发 0 --进行中 2 --已出发
-                            applyfeestatus=item["ApplyFeeStatus"],
-                            applyfeedate=item["ApplyFeeDate"],
-                            applycanceled= isCanceled, //是否被退回
+                            applyfeestatus = item["ApplyFeeStatus"],
+                            applyfeedate = item["ApplyFeeDate"],
+                            applycanceled = isCanceled, //是否被退回
                             cancelreason, //退回原因
                             startdate_wk = DateTimeTool.GetWeekdayCN(item["startdate"]),
                             //距离今天的天数
@@ -1917,16 +1933,16 @@ namespace nRelax.Tour.WebApp
                     }
                 }
                 GuideInfoService biz = new GuideInfoService();
-                GuideInfo guide  = biz.GetByMobileNoAndUpdateUnionId(mobileno, unionid);
-                if (guide !=null)
+                GuideInfo guide = biz.GetByMobileNoAndUpdateUnionId(mobileno, unionid);
+                if (guide != null)
                 {
                     try
                     {
                         var dguide = new
                         {
                             guideid = guide.Id,
-                            name=guide.GuideName,
-                            mobile=guide.Mobile,
+                            name = guide.GuideName,
+                            mobile = guide.Mobile,
                         };
                         ReturnJsonResponse(new { success = 1, data = dguide, errorcode = ErrorCode.EMPTY });
                     }
@@ -2033,7 +2049,7 @@ namespace nRelax.Tour.WebApp
         /// <returns></returns>
         private string MiniAppLogin(string strappid)
         {
-        
+
             //case "2": //导游助手小程序
             string Appid = WebConfig.GuideAppId;
             string SecretKey = WebConfig.GuideAppKey;
@@ -2050,7 +2066,7 @@ namespace nRelax.Tour.WebApp
                 string result = reader.ReadToEnd();
                 if (result.IndexOf("errcode") >= 0)
                 {
-                    Logger.Error(string.Format("appid={0} \r\n mininappid={1} \r\n secrkey={2}",   strappid, Appid, SecretKey));
+                    Logger.Error(string.Format("appid={0} \r\n mininappid={1} \r\n secrkey={2}", strappid, Appid, SecretKey));
                     Logger.Error(result);
                     return "";
                 }
@@ -2098,7 +2114,7 @@ namespace nRelax.Tour.WebApp
             }
         }
 
-     
+
 
         /// <summary>
         /// 根据微信UnionId获取導遊信息 G002
@@ -2132,66 +2148,8 @@ namespace nRelax.Tour.WebApp
             }
         }
 
-        
-        private void CancelBill(decimal billid)
-        {
-            ///todo 已经迁移到apibiz
-            CancelBill(billid, false);
-        }
-        private void CancelBill(decimal billid, bool checkOwer)
-        {
-            ///todo 已经迁移到apibiz
-            decimal memberid = GetQueryDecimal("memberid");
-            string deviceid = GetQueryString("deviceid");
-            if (billid == 0)
-            {
-                ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = ErrorCode.ERROR_PARAM });
-                return;
-            }
-            try
-            {
-                ArrayList ids = new ArrayList();
-                ids.Add(billid);
-                TourBillBiz biz = new TourBillBiz();
-                if (checkOwer)
-                {
-                    TourBill bill = biz.GetByID(billid);
-                    //0 = 已生成 1 = 已付款 2 = 已审核 3 = 已出行 4 = 已评价 - 1 = 已取消
-                    //只有未支付订单才可以取消
-                    if (bill.AppStatus != 0)
-                    {
-                        ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = ErrorCode.CANCEL_CANTNOT });
-                        return;
-                    }
-                    if (memberid > 0)
-                    {
-                        if (bill.MemberId != memberid)
-                        {
-                            ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = ErrorCode.ERROR_PARAM });
-                            return;
-                        }
-                    }
-                    if (deviceid.Trim().Length > 0)
-                    {
-                        if (bill.DeviceId != deviceid)
-                        {
-                            ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = ErrorCode.ERROR_PARAM });
-                            return;
-                        }
-                    }
-                }
-                biz.CancelReserveBill(ids);
 
-                ReturnJsonResponse(new ApiResult { success = 1, data = "", errorcode = ErrorCode.EMPTY });
-            }
-            catch (Exception ex)
-            {
-                LogError(ex);
-                ReturnJsonResponse(new ApiResult { success = 0, data = "", errorcode = ErrorCode.SYSTEM_ERROR });
-            }
-        }
-        
-        
+
         private static string GetFileExt(string _filepath)
         {
             if (string.IsNullOrEmpty(_filepath))
@@ -2215,8 +2173,41 @@ namespace nRelax.Tour.WebApp
             sr.Dispose();
             return byteFile;
         }
+        private string GetQueryToken()
+        {
+            string token = GetQueryString("token");
+            string data_token = GetQueryString("dtoken");
+            if (token.Length == 0 && data_token.Length > 0)
+                token = data_token;
+            return token;
+        }
 
-       
+        private bool CheckTokenValid(string token)
+        {
+            try
+            {
+                if (token == "7udjyughngxfs6yd")
+                    return true;
+
+                if (token.Length == 0)
+                {
+                    return false;
+                }
+                MemberBiz biz = new MemberBiz();
+                bool checkok = new MembersTokenBiz().CheckToken(token);
+                if (!checkok)
+                {
+                    return false;
+                }
+                return checkok;
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+                return false;
+            }
+        }
+
         /// <summary>
         /// 检查token
         /// </summary>
@@ -2225,28 +2216,17 @@ namespace nRelax.Tour.WebApp
         {
             try
             {
-                string token = GetQueryString("token");
-                Logger.Error("token==>" + token);
-                string data_token = GetQueryString("dtoken");
-                Logger.Error("dtoken==>" + data_token);
-                if (token.Length == 0 && data_token.Length > 0)
-                    token = data_token;
-                //测试token
-                if (token == "7udjyughngxfs6yd")
-                    return true;
-
+                string token = GetQueryToken();
                 if (token.Length == 0)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.CHECK_TOKEN_EXISTS_ERROR });
                     return false;
                 }
-                MemberBiz biz = new MemberBiz();
-                bool checkok = biz.CheckToken(token);
-                Logger.Error("CheckToken==>" + checkok.ToString());
+
+                bool checkok = CheckTokenValid(token);
                 if (!checkok)
                 {
                     ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.CHECK_TOKEN_ERROR });
-                    Logger.Error("token 60013==>" + token);
                     //new DingTalkTool().SendMessage("token " + token + " 校验失败!");
                     return false;
                 }
@@ -2259,6 +2239,6 @@ namespace nRelax.Tour.WebApp
                 return false;
             }
         }
-        
+
     }
 }

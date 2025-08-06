@@ -8,8 +8,8 @@
   <Parameter Name="Recipe007Dept" ShowName="" Value="" Remark="星辰旅游门市代码,用英文逗号隔开,指定的部门代码打印的收据使用星辰的logo" />
   <Parameter Name="HKROE" ShowName="默認港幣匯率" Value="0.88201" Remark="" />
   <Parameter Name="TICROE" ShowName="TIC缴纳比例" Value="0.0015" Remark="" />
-  <!--默認預定過期時間(小時)-->
-  <Parameter Name="DefaultReserveHours" ShowName="默認預定過期時間" Value="48" Remark="單位:小時" />
+  <!--默認預定過期時間(小時)
+  <Parameter Name="DefaultReserveHours" ShowName="默認預定過期時間" Value="48" Remark="單位:小時" />-->
   <!--默認一頁顯示數據數-->
   <Parameter Name="DefaultPageSize" ShowName="默認1頁顯示行數" Value="15" Remark="" />
   <!--線路成本模板-->
@@ -34,7 +34,7 @@
   <Parameter Name="AllowNotAddRoom" ShowName="是否允許不補房差" Value="0" Remark="0=不允許不補房差,不能三人同房;1=允許不補房差(但:1人必須補房差)" />
   <!--短信通知遊客資料配置-->
   <Parameter Name="SMSNotifyTestNo" ShowName="短信通知：測試電話號碼" Value="13926576007" Remark="填寫後僅僅發送測試短信" />
-  <Parameter Name="SMSNotifyTempId" ShowName="短信通知：短信內容模板" Value="2063999" Remark="親愛的旅客：{1}出遊資訊：1.集合地點：{2}集合；2.導遊{3}旗號：{4}" />
-  <!--<Parameter Name="SMSNotifyLinkedTempId" ShowName="短信通知：電話聯繫後短信模板" Value="1712256" Remark="電話聯繫到客人後發送短信的模板ID" />
+  <!--<Parameter Name="SMSNotifyTempId" ShowName="短信通知：短信內容模板" Value="2063999" Remark="親愛的旅客：{1}出遊資訊：1.集合地點：{2}集合；2.導遊{3}旗號：{4}" />
+  <Parameter Name="SMSNotifyLinkedTempId" ShowName="短信通知：電話聯繫後短信模板" Value="1712256" Remark="電話聯繫到客人後發送短信的模板ID" />
   <Parameter Name="SMSNotifyNotLinkedTempId" ShowName="短信通知：電話未接通短信模板" Value="1712263" Remark="電話未能聯繫到客人後發送短信的模板ID" />-->
 </ConfigPool>
