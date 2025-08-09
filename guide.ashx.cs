@@ -79,14 +79,15 @@ namespace nRelax.Tour.WebApp
             switch (action)
             {
                 case "0001":
+                    // 解密小程序用户数据,獲取openid,unionid
                     DecryptMiniAppUserData();
                     break;
-                case "0002": //获取留位小程序SessionKey
+                case "0002": //通过后台服务,将code换成手机号码
                     GetMiniLoginInfo();
                     break;
-                case "0003": //openid,data,iv,key
-                    LoginByMiniPhone();
-                    break;
+                //case "0003": //openid,data,iv,key
+                //    LoginByMiniPhone();
+                //    break;
 
                 case "G000":
                     //身份认证: 通过 手机号码,姓名,负责团号认证 获取此导游属于哪家公司
@@ -776,7 +777,7 @@ namespace nRelax.Tour.WebApp
         }
 
         /// <summary>
-        /// 获取留位小程序Session Key
+        /// 通过后台服务,将code换成手机号码
         /// </summary>
         private void GetMiniLoginInfo()
         {
@@ -811,49 +812,49 @@ namespace nRelax.Tour.WebApp
             }
         }
 
-        /// <summary>
-        /// 003 解密小程序手机号码,並註冊或登錄
-        /// </summary>
-        private void LoginByMiniPhone()
-        {
+        ///// <summary>
+        ///// 003 解密小程序手机号码,並註冊或登錄
+        ///// </summary>
+        //private void LoginByMiniPhone()
+        //{
 
-            string openId = GetQueryString("openid");
-            try
-            {
-                if (openId.Trim().Length == 0)
-                {
-                    ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
-                    return;
-                }
+        //    string openId = GetQueryString("openid");
+        //    try
+        //    {
+        //        if (openId.Trim().Length == 0)
+        //        {
+        //            ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_PARAM });
+        //            return;
+        //        }
 
-                string phone = getMiniPhoneNumber();
-                if (phone.Length > 0)
-                {
-                    //写会员数据
-                    MemberBiz biz = new MemberBiz();
-                    decimal nMemberId = biz.RegisterFromAppByMobile(phone, openId);
-                    if (nMemberId == 0)
-                    {
-                        ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_CREATE_MEMBER });
-                        return;
-                    }
+        //        string phone = getMiniPhoneNumber();
+        //        if (phone.Length > 0)
+        //        {
+        //            //写会员数据
+        //            MemberBiz biz = new MemberBiz();
+        //            decimal nMemberId = biz.RegisterFromAppByMobile(phone, openId);
+        //            if (nMemberId == 0)
+        //            {
+        //                ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_CREATE_MEMBER });
+        //                return;
+        //            }
 
-                    ReturnJsonResponse(new ApiResult { success = 1, data = new { phone = phone, memberId = nMemberId }, errorcode = ErrorCode.EMPTY });
-                }
-                else
-                {
-                    //获取手机号码失败
-                    ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_GETPHONE });
-                    return;
-                }
+        //            ReturnJsonResponse(new ApiResult { success = 1, data = new { phone = phone, memberId = nMemberId }, errorcode = ErrorCode.EMPTY });
+        //        }
+        //        else
+        //        {
+        //            //获取手机号码失败
+        //            ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.ERROR_GETPHONE });
+        //            return;
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.SYSTEM_ERROR });
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //        ReturnJsonResponse(new ApiResult { success = 0, data = string.Empty, errorcode = ErrorCode.SYSTEM_ERROR });
+        //    }
+        //}
 
 
 
